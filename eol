@@ -1,0 +1,26 @@
+#! /usr/bin/python
+# This reads in a file and prints out the file properly formatted,
+# such that every line does not exceed line_max characters
+# As of right now, it just fixes long lines that are like paragraphs in latex
+
+import sys
+
+filename = "no_file_specified" if len(sys.argv) < 2 else sys.argv[1]
+line_max = 80 if len(sys.argv) < 3 else sys.argv[2]
+
+f = file(filename, 'r')
+overflow = []
+for line in f:
+	if len(line) > line_max:
+		words = line.split(" ")
+		while words:
+			new_line = ''
+			if len(words[0]) >= line_max:
+				new_line = words[0]
+			else:
+				while words and len(new_line + words[0]) <= line_max:
+					new_line = new_line + words.pop(0) + " "
+			print new_line[:-1]		# cut off the last space
+	else:
+		print line[:-1]		# cut off the newline character
+
